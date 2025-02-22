@@ -1,20 +1,13 @@
+import os
 import telebot
 import sqlite3
 import nltk
-from nltk.tokenize import word_tokenize
-from collections import Counter
-import math
 
-# Descargar datos de NLTK (solo la primera vez)
-nltk.download("punkt")
-
-# 🔹 Token del bot
-TOKEN = "7622474169:AAG2hHAp1C1MAzI7WerytzTxEspkFLHix8M"
-
-# 🔹 Inicialización del bot
+# Inicializa el bot con una variable de entorno para el token
+TOKEN = os.getenv("TOKEN", "7622474169:AAG2hHAp1C1MAzI7WerytzTxEspkFLHix8M")
 bot = telebot.TeleBot(TOKEN)
 
-# 🔹 Diccionario de respuestas basado en el menú
+# Diccionario de respuestas basado en el menú
 menu_respuestas = {
     "1": "📌 **Horas requeridas:** Debes completar **192 horas** de prácticas.",
     "2": "🖥 **Plataforma de registro:** Utiliza la aplicación de **PowerApps** para registrar tus prácticas. Puedes acceder desde aquí: [PowerApps](https://bit.ly/41aJMdb).",
@@ -28,7 +21,7 @@ menu_respuestas = {
     "10": "📜 **Validación de prácticas previas:** Si has participado en prácticas antes, puedes validar esta asignatura presentando los **documentos correspondientes** a través del servicio en línea de la UTPL.",
 }
 
-# 🔹 Contactos de tutores
+# Contactos de tutores
 contactos_tutores = (
     "📧 **Contactos de tutores:**\n"
     "- **PhD. Daniel Alejandro Guaman** (Director de carrera TIC) → [daguaman@utpl.edu.ec](mailto:daguaman@utpl.edu.ec)\n"
@@ -93,4 +86,7 @@ def responder_duda(message):
 if __name__ == "__main__":
     print("🔹 Iniciando bot de Practicum UTPL...")
     print("🤖 Bot en ejecución...")
-    bot.infinity_polling()
+    try:
+        bot.infinity_polling(timeout=60, long_polling_timeout=60)
+    except Exception as e:
+        print(f"Error en infinity_polling: {e}")
